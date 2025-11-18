@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>happy ur dayy!</title>
+
+  <!-- Font handwriting dari Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@300;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#fff0f6;
+      --pink:#ff69a8;
+      --accent:#ff4d8f;
+      --card:#fff;
+      --muted:#7a5a6a;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Nunito',sans-serif;
+      background:linear-gradient(180deg,var(--bg) 0%,#ffe8f2 60%);
+      color:#41162b;
+      min-height:100vh;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:2rem;
+    }
+
+    .card{
+      width:100%;
+      max-width:900px;
+      background:rgba(255,255,255,0.85);
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(165,83,132,0.18);
+      padding:2rem;
+      position:relative;
+    }
+
+    h1{
+      margin:0;
+      font-family:'Pacifico',cursive;
+      font-size:3rem;
+      color:var(--accent);
+      text-shadow:0 2px 0 rgba(255,255,255,0.7);
+    }
+
+    .subtitle{
+      color:var(--muted);
+      margin-top:8px;
+      opacity:0;
+      transform:translateY(10px);
+      animation:fadeInUp 2s ease forwards;
+      animation-delay:0.6s;
+    }
+
+    @keyframes fadeInUp{
+      from{opacity:0; transform:translateY(10px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    .controls{
+      position:absolute;
+      top:20px;
+      right:20px;
+      display:flex;
+      gap:8px;
+    }
+
+    .btn{
+      background:var(--pink);
+      border:none;
+      color:white;
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      transition:all .3s ease;
+    }
+
+    .btn:hover{opacity:0.8;}
+
+    .sky{
+      position:relative;
+      height:380px;
+      margin-top:1rem;
+      overflow:hidden;
+      border-radius:12px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.1),rgba(255,255,255,0.03));
+      border:1px dashed rgba(255,77,143,0.08);
+    }
+
+    .float-item{
+      position:absolute;
+      bottom:-60px;
+      font-size:28px;
+      opacity:0;
+      animation:rise linear forwards;
+      pointer-events:none;
+      user-select:none;
+    }
+
+    @keyframes rise{
+      0%{transform:translateY(0) scale(0.9) rotate(0deg);opacity:0;}
+      10%{opacity:1;}
+      100%{transform:translateY(-130vh) scale(1.05) rotate(360deg);opacity:0;}
+    }
+
+    footer{margin-top:12px; color:var(--muted); font-size:13px;}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="controls">
+      <button class="btn" id="musicBtn">🎵 Musik</button>
+    </div>
+
+    <h1>happyy urr dayy anak kecill!</h1>
+    <div class="subtitle">hari ini kamu ulang tahun ya? selamat bertambah usia, sehat selalu dan panjang umur yaaa, 
+        semoga semakin sabar lagi ya hehe, doa terbaik buat kamuu. semoga di umur yang sekarang semesta berpihak ya sama kamu, 
+        semoga bisa dapetin hal yang selama ini kamu perjuangin, semoga selalu bahagia dan semoga itu selamanya. 
+        my best wishes for u.</div>
+
+    <div class="sky" id="sky"></div>
+    
+    <footer>Jika musik tidak otomatis diputar, tekan tombol Musik 🎶</footer>
+
+    <!-- Musik backsound -->
+    <audio id="bgAudio" loop>
+      <source src="alamak.mp3" type="audio/mpeg">
+      Browser Anda tidak mendukung pemutar audio.
+    </audio>
+  </div>
+
+  <script>
+    const audio = document.getElementById('bgAudio');
+    const musicBtn = document.getElementById('musicBtn');
+    const photoBtn = document.getElementById('photoBtn');
+    const photo = document.getElementById('memoryPhoto');
+
+    // Musik autoplay
+    audio.volume = 0.6;
+    audio.play().catch(()=>{});
+
+    let playing = true;
+    musicBtn.addEventListener('click', ()=>{
+      if(playing){
+        audio.pause();
+        musicBtn.textContent = "🔈 Putar Musik";
+      } else {
+        audio.play();
+        musicBtn.textContent = "🎵 Musik";
+      }
+      playing = !playing;
+    });
+
+    // Tombol foto (fade-in/out lembut + ubah teks)
+    let photoVisible = false;
+    photoBtn.addEventListener('click', ()=>{
+      photoVisible = !photoVisible;
+      if(photoVisible){
+        photo.style.display = 'inline-block';
+        setTimeout(()=>photo.classList.add('show'), 10);
+        photoBtn.textContent = "❌ Sembunyikan Foto";
+      } else {
+        photo.classList.remove('show');
+        setTimeout(()=>photo.style.display='none', 800);
+        photoBtn.textContent = "📷 Lihat Foto";
+      }
+    });
+
+    // Elemen mengambang (bunga, kue, balon)
+    const sky = document.getElementById('sky');
+    const types = ['🌸','🎂','🎈'];
+
+    function createFloat(){
+      const el = document.createElement('div');
+      el.className='float-item';
+      el.textContent = types[Math.floor(Math.random()*types.length)];
+      el.style.left = Math.random()*90+'%';
+      el.style.fontSize = (18+Math.random()*34)+'px';
+      el.style.animationDuration = (6+Math.random()*7)+'s';
+      sky.appendChild(el);
+      setTimeout(()=>el.remove(),8000);
+    }
+
+    setInterval(createFloat,600);
+    for(let i=0;i<6;i++) setTimeout(createFloat, i*300);
+  </script>
+</body>
+</html>
